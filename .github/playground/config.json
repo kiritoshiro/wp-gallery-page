@@ -1,0 +1,35 @@
+{
+  "mounts": [
+    {
+      "host": ".",
+      "vfs": "/wordpress/wp-content/plugins/wp-gallery-page"
+    }
+  ],
+  "plugins": [
+    "wp-gallery-page/wp-gallery-page.php"
+  ],
+  "watch": [
+    "/wordpress/wp-content/plugins/wp-gallery-page/"
+  ],
+  "after": [
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; $ids = []; foreach (['Lesson A', 'Lesson B', 'Lesson C', 'Lesson D'] as $i => $title) { $ids[$title] = wp_insert_post(['post_type' => 'page', 'post_status' => 'publish', 'post_title' => $title, 'post_date' => '2026-0' . ($i + 1) . '-01 10:00:00']); } $ids['Draft lesson'] = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Draft lesson']); $cat = wp_insert_term('News', 'category'); foreach (['Post one', 'Post two'] as $title) { wp_insert_post(['post_type' => 'post', 'post_status' => 'publish', 'post_title' => $title, 'post_content' => 'Smoke text for ' . $title, 'post_category' => [$cat['term_id']]]); } update_option('pg_gallery_settings', ['page_ids' => [$ids['Lesson C'], $ids['Draft lesson'], $ids['Lesson A'], $ids['Lesson B']], 'big_page_id' => $ids['Lesson B'], 'youtube_playlist' => 'PLjcvwNsWxJC5zpLT0rb3VIVyhsEV02uPp', 'custom_images' => [$ids['Lesson A'] => 'https://example.com/lesson-a.jpg'], 'latest_category' => $cat['term_id']]);"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; $html = do_shortcode('[page_gallery]'); $at = function ($needle) use ($html) { $p = strpos($html, $needle); if (false === $p) { throw new Exception('gallery output lacks ' . $needle); } return $p; }; if (!($at('pg-video-panel') < $at('pg-latest-panel'))) { throw new Exception('the video panel must come before the latest posts'); } if (!($at('pg-card pg-card--big') < $at('>Lesson B<') && $at('>Lesson B<') < $at('pg-grid'))) { throw new Exception('Lesson B must be the featured page'); } if (!($at('>Lesson C<') < $at('>Lesson A<'))) { throw new Exception('grid order not kept'); } if (false !== strpos($html, 'Draft lesson')) { throw new Exception('a draft page was shown'); } $at('https://example.com/lesson-a.jpg'); $at('youtube-nocookie.com/embed/videoseries?list=PLjcvwNsWxJC5zpLT0rb3VIVyhsEV02uPp'); $at('Post two'); $at('pg-noimg'); if (false !== strpos(do_shortcode('[page_gallery show_yt=\"0\"]'), 'pg-video-panel')) { throw new Exception('show_yt=0 still shows the video'); } add_filter('determine_locale', function () { return 'lt_LT'; }); add_filter('plugin_locale', function () { return 'lt_LT'; }); unload_textdomain('wp-gallery-page'); WPGP_Gallery::load_translations(); if ('Puslapių galerija' !== __('Page Gallery', 'wp-gallery-page')) { throw new Exception('Lithuanian translation did not load'); }"
+    }
+  ],
+  "fixture": "<!-- wp:shortcode -->[page_gallery]<!-- /wp:shortcode -->",
+  "expect": [
+    "<div class=\"pg-wrap\"",
+    "wp-gallery-page/assets/gallery.css",
+    "pg-video-panel",
+    "Naujausi įrašai",
+    "Praeitos pamokos"
+  ],
+  "paths": [
+    "/wp-admin/admin.php?page=wp-gallery-page"
+  ]
+}

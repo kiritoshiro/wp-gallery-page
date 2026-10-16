@@ -1,0 +1,102 @@
+/* Page Gallery admin screen. Long lists scroll inside their own boxes. */
+.wpgp { max-width: 1400px; }
+.wpgp-header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: 8px 0 16px; }
+.wpgp-header h1 { margin: 0; padding: 0; }
+.wpgp-shortcode { display: inline-flex; align-items: center; gap: 8px; }
+.wpgp-shortcode code { font-size: 13px; padding: 4px 8px; border-radius: 4px; }
+
+.wpgp-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.wpgp-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.wpgp-aside { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 46px; }
+
+.wpgp-card { background: #fff; border: 1px solid #dcdcde; border-radius: 8px; padding: 16px 20px 20px; box-shadow: 0 1px 1px rgba(0, 0, 0, .04); }
+.wpgp-card > h2 { margin: 0 0 6px; font-size: 15px; }
+.wpgp-card > .description { margin: 0 0 14px; }
+
+/* Picker: two scrollable boxes side by side */
+.wpgp-picker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; }
+.wpgp-box { display: flex; flex-direction: column; border: 1px solid #c3c4c7; border-radius: 6px; background: #fff; min-width: 0; }
+.wpgp-box-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #dcdcde; background: #f6f7f7; border-radius: 6px 6px 0 0; }
+.wpgp-count { background: #dcdcde; border-radius: 10px; padding: 0 8px; font-size: 12px; line-height: 20px; }
+.wpgp-search { margin-left: auto; min-width: 0; width: 50%; }
+.wpgp-box-body { height: 440px; overflow-y: auto; overscroll-behavior: contain; margin: 0; padding: 6px; }
+.wpgp-box-foot { display: flex; gap: 6px; align-items: flex-start; padding: 8px 10px; border-top: 1px solid #dcdcde; background: #f6f7f7; border-radius: 0 0 6px 6px; }
+.wpgp-box-foot .dashicons { color: #dba617; }
+.wpgp-empty { color: #646970; padding: 10px; margin: 0; }
+.wpgp-selected-empty { padding: 0 16px 12px; }
+
+.wpgp-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 4px; cursor: pointer; }
+.wpgp-item:hover { background: #f0f6fc; }
+.wpgp-item[hidden] { display: none; }
+.wpgp-item input { margin: 0; }
+.wpgp-item-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wpgp-item-date { color: #646970; font-size: 12px; white-space: nowrap; }
+
+.wpgp-badge { display: inline-block; border-radius: 3px; padding: 0 6px; font-size: 11px; line-height: 18px; white-space: nowrap; }
+.wpgp-badge--status { background: #fcf0f1; color: #8a2424; }
+.wpgp-badge--featured { background: #fcf9e8; color: #6e4e00; display: none; }
+.wpgp-badge--custom { background: #f0f6fc; color: #0a4b78; display: none; }
+.is-featured .wpgp-badge--featured,
+.is-auto .wpgp-badge--featured { display: inline-block; }
+.is-auto .wpgp-badge--featured { opacity: .7; }
+.has-custom .wpgp-badge--custom { display: inline-block; }
+
+/* Rows in "In the gallery" */
+.wpgp-selected { list-style: none; }
+.wpgp-chip { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; padding: 6px 8px; background: #fff; border: 1px solid #dcdcde; border-radius: 6px; }
+.wpgp-chip.is-featured { border-color: #dba617; background: #fffdf3; }
+.wpgp-chip-placeholder { height: 64px; margin: 0 0 6px; border: 2px dashed #72aee6; border-radius: 6px; background: #f0f6fc; }
+.wpgp-handle { cursor: grab; color: #8c8f94; }
+.wpgp-handle:active { cursor: grabbing; }
+.wpgp-thumb { flex: 0 0 auto; width: 38px; height: 52px; border-radius: 3px; overflow: hidden; background: #f0f0f1; display: flex; align-items: center; justify-content: center; color: #a7aaad; }
+.wpgp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wpgp-chip-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.wpgp-chip-title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wpgp-chip-meta { display: flex; flex-wrap: wrap; gap: 4px; min-height: 18px; }
+.wpgp-chip-actions { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.wpgp-star .dashicons { color: #a7aaad; }
+.wpgp-star:hover .dashicons,
+.wpgp-star[aria-pressed="true"] .dashicons { color: #dba617; }
+.wpgp-reset { display: none; }
+.has-custom .wpgp-reset { display: inline; }
+.wpgp-remove { color: #b32d2e; }
+.wpgp-remove:hover { color: #8a2424; }
+.wpgp-chip .button-link { text-decoration: none; }
+
+/* Fields */
+.wpgp-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+.wpgp-group { border: 1px solid #dcdcde; border-radius: 6px; padding: 8px 14px 12px; margin: 0; min-width: 0; }
+.wpgp-group legend { font-weight: 600; padding: 0 6px; }
+.wpgp-field { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 0; }
+.wpgp-field--wide { flex-direction: column; align-items: stretch; gap: 4px; }
+.wpgp-field--wide input.regular-text,
+.wpgp-field--wide select { width: 100%; max-width: none; }
+.wpgp-field .description { margin: 0; }
+.wpgp-label { font-weight: 500; }
+.wpgp-input { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.wpgp-unit { color: #646970; }
+.wpgp-check { justify-content: flex-start; }
+
+/* Save bar: stays at the bottom of the window while the form scrolls */
+.wpgp-savebar { position: sticky; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 12px; margin: 20px 0 0; padding: 12px 20px; background: rgba(255, 255, 255, .96); border: 1px solid #dcdcde; border-radius: 8px 8px 0 0; box-shadow: 0 -2px 8px rgba(0, 0, 0, .06); }
+.wpgp-savebar .button { margin: 0; }
+
+/* Sidebar */
+.wpgp-dirty { color: #996800; font-weight: 500; }
+.wpgp-dirty[hidden] { display: none; }
+.wpgp-steps { margin: 0 0 0 18px; }
+.wpgp-steps li { margin-bottom: 6px; }
+.wpgp-attrs summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.wpgp-attrs ul { margin: 8px 0 0; }
+.wpgp-attrs li { margin-bottom: 4px; }
+
+@media (max-width: 1280px) {
+	.wpgp-layout { grid-template-columns: minmax(0, 1fr); }
+	.wpgp-aside { position: static; flex-direction: row; flex-wrap: wrap; }
+	.wpgp-aside > * { flex: 1 1 260px; }
+}
+@media (max-width: 960px) {
+	.wpgp-picker,
+	.wpgp-columns { grid-template-columns: minmax(0, 1fr); }
+	.wpgp-box-body { height: 340px; }
+}
