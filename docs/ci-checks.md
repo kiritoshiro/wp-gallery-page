@@ -8,6 +8,7 @@ Its final job, **All security checks passed**, fails if any check failed, was ca
 
 - **Baseline** (`cybersecurity.yml`):
   - Semgrep CE (`p/php`, `p/javascript`);
+  - a check that any `admin_post_*`/`wp_ajax_*` handler in `includes/` checks a capability and a nonce (none exist today);
   - TruffleHog secret scan without verification;
   - zizmor (workflow security);
   - Trivy (dependencies and configuration, HIGH/CRITICAL);
